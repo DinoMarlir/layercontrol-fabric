@@ -2,7 +2,7 @@ package me.obsilabor.layercontrol.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayers;
@@ -30,7 +30,7 @@ public class CustomTridentRiptideLayer<T extends LivingEntity> extends RenderLay
         for(int m = 0; m < 3; ++m) {
             poseStack.pushPose();
             float n = j * (float)(-(45 + m * 5));
-            poseStack.mulPose(Vector3f.YP.rotationDegrees(n));
+            poseStack.mulPose(Axis.YP.rotationDegrees(n));
             float o = 0.75F * (float)m;
             poseStack.scale(o, o, o);
             poseStack.translate(0.0, -0.2F + 0.6F * (float)m, 0.0);

@@ -1,6 +1,6 @@
 package me.obsilabor.layercontrol.config
 
-import java.util.UUID
+import java.util.*
 
 data class SomehowMapsDontWork(
     val uuid: UUID,

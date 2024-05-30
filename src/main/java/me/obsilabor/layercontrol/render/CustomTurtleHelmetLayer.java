@@ -3,7 +3,6 @@ package me.obsilabor.layercontrol.render;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import java.util.Map;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,6 +17,8 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public class CustomTurtleHelmetLayer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T, M> {
     private static final Map<String, ResourceLocation> ARMOR_LOCATION_CACHE = Maps.newHashMap();
@@ -36,7 +37,7 @@ public class CustomTurtleHelmetLayer<T extends LivingEntity, M extends HumanoidM
     private void renderArmorPiece(PoseStack matrices, MultiBufferSource vertexConsumers, EquipmentSlot armorSlot, int light, A model) {
         ItemStack itemStack = new ItemStack(Items.TURTLE_HELMET);
         ArmorItem armorItem = (ArmorItem)itemStack.getItem();
-        if (armorItem.getSlot() == armorSlot) {
+        if (armorItem.getEquipmentSlot() == armorSlot) {
             this.getParentModel().copyPropertiesTo(model);
             this.setPartVisibility(model, armorSlot);
             boolean foil = itemStack.hasFoil();
@@ -70,7 +71,7 @@ public class CustomTurtleHelmetLayer<T extends LivingEntity, M extends HumanoidM
     }
 
     private ResourceLocation getArmorLocation(ArmorItem item, boolean legs, @Nullable String overlay) {
-        String materialName = item.getMaterial().getName();
+        String materialName = item.getMaterial().getRegisteredName().split(":")[1];
         String string = "textures/models/armor/" + materialName + "_layer_" + (legs ? 2 : 1) + (overlay == null ? "" : "_" + overlay) + ".png";
         return ARMOR_LOCATION_CACHE.computeIfAbsent(string, ResourceLocation::new);
     }

@@ -2,15 +2,9 @@ package me.obsilabor.layercontrol.config
 
 import me.obsilabor.layercontrol.minecraft
 import me.obsilabor.layercontrol.render.CustomBigHeadLayer
-import me.obsilabor.layercontrol.render.CustomTurtleHelmetLayer
 import net.minecraft.client.model.HumanoidModel
-import net.minecraft.client.renderer.entity.layers.ArrowLayer
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer
-import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer
-import net.minecraft.client.renderer.entity.layers.ParrotOnShoulderLayer
-import net.minecraft.client.renderer.entity.layers.PlayerItemInHandLayer
 import net.minecraft.client.renderer.entity.layers.RenderLayer
-import net.minecraft.client.renderer.entity.layers.SpinAttackEffectLayer
 import net.minecraft.world.entity.LivingEntity
 import java.util.*
 

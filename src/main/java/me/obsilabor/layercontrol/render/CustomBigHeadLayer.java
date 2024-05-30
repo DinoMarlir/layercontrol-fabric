@@ -16,8 +16,11 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.SkullBlock;
+
 import java.util.Map;
+import java.util.Optional;
 
 public class CustomBigHeadLayer<T extends LivingEntity, M extends EntityModel<T> & HeadedModel> extends RenderLayer<T, M> {
     private final float scaleX;
@@ -49,9 +52,12 @@ public class CustomBigHeadLayer<T extends LivingEntity, M extends EntityModel<T>
             GameProfile gameProfile = ((Player) livingEntity).getGameProfile();
             poseStack.translate(-0.5, 0.0, -0.5);
             SkullBlock.Type type = SkullBlock.Types.PLAYER;
-            SkullModelBase skullModelBase = (SkullModelBase)this.skullModels.get(type);
-            RenderType renderType = SkullBlockRenderer.getRenderType(type, gameProfile);
-            SkullBlockRenderer.renderSkull((Direction)null, 180.0F, f, poseStack, multiBufferSource, i, skullModelBase, renderType);
+            SkullModelBase skullModelBase = this.skullModels.get(type);
+            RenderType renderType = SkullBlockRenderer.getRenderType(
+                    type,
+                    new ResolvableProfile(Optional.of(gameProfile.getName()), Optional.of(gameProfile.getId()), gameProfile.getProperties(), gameProfile)
+            );
+            SkullBlockRenderer.renderSkull(null, 180.0F, f, poseStack, multiBufferSource, i, skullModelBase, renderType);
             poseStack.popPose();
         }
     }

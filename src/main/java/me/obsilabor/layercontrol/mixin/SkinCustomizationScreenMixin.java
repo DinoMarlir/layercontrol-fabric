@@ -4,6 +4,7 @@ import me.obsilabor.layercontrol.config.ClothConfigManager;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.SkinCustomizationScreen;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,6 +20,12 @@ public abstract class SkinCustomizationScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("HEAD"))
     private void addCustomButton(CallbackInfo ci) {
-        addRenderableWidget(new Button(0, 0, 200, 20, Component.translatable("layercontrol.config"), (button) -> this.minecraft.setScreen(ClothConfigManager.INSTANCE.buildScreen())));
+        this.addRenderableWidget(
+                Button.builder(
+                        Component.translatable("layercontrol.config"),
+                        (button) -> this.minecraft.setScreen(ClothConfigManager.INSTANCE.buildScreen()))
+                        .bounds(0, 0, 200, 20)
+                        .build()
+        );
     }
 }

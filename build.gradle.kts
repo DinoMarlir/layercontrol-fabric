@@ -1,51 +1,43 @@
 import com.matthewprenger.cursegradle.CurseProject
 import com.matthewprenger.cursegradle.CurseRelation
 import com.matthewprenger.cursegradle.Options
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("fabric-loom") version "0.13-SNAPSHOT"
-    kotlin("jvm") version "1.7.10"
-    kotlin("kapt") version "1.7.10"
-    kotlin("plugin.serialization") version "1.7.10"
-    id("io.github.juuxel.loom-quiltflower") version "1.7.3"
-    id("org.quiltmc.quilt-mappings-on-loom") version "4.2.1"
+    id("fabric-loom") version "1.6-SNAPSHOT"
+    kotlin("jvm") version "1.2.0"
+    kotlin("plugin.serialization") version "2.0.0"
     id("com.modrinth.minotaur") version "2.+"
     id("com.matthewprenger.cursegradle") version "1.4.0"
     id("java")
 }
 
-val javaVersion = 17
 group = "me.obsilabor"
-version = "1.0.3+mc1.19.2"
+version = "1.0.4+mc1.20.6"
 
 repositories {
     mavenCentral()
     maven("https://maven.shedaniel.me/")
     maven("https://maven.terraformersmc.com")
-    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
     // kotlin
     implementation(kotlin("stdlib"))
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     // fabric
-    minecraft("com.mojang:minecraft:1.19.2")
+    minecraft("com.mojang:minecraft:1.20.6")
     mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:0.14.9")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.59.0+1.19.2")
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.8.2+kotlin.1.7.10")
+    modImplementation("net.fabricmc:fabric-loader:0.15.11")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.99.4+1.20.6")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.11.0+kotlin.2.0.0")
     // modmenu & clothconfig
-    modApi("com.terraformersmc:modmenu:4.0.6") {
+    modApi("com.terraformersmc:modmenu:10.0.0-beta.1") {
         exclude("net.fabricmc.fabric-api")
     }
-    modApi("me.shedaniel.cloth:cloth-config-fabric:8.0.75") {
+    modApi("me.shedaniel.cloth:cloth-config-fabric:14.0.126") {
         exclude("net.fabricmc.fabric-api")
     }
-    compileOnly("io.github.waterfallmc:waterfall-api:1.19-R0.1-SNAPSHOT")
-    compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
-    compileOnly("com.velocitypowered:velocity-api:3.0.1")
-    kapt("com.velocitypowered:velocity-api:3.0.1")
 }
 
 
@@ -66,11 +58,11 @@ tasks {
         }
     }
     compileJava {
-        options.release.set(javaVersion)
+        options.release.set(21)
         options.encoding = "UTF-8"
     }
     compileKotlin {
-        kotlinOptions.jvmTarget = "$javaVersion"
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_21)
     }
     named("curseforge") {
         onlyIf {
@@ -85,7 +77,7 @@ modrinth {
     projectId.set("VP0RHYaP")
     versionNumber.set(project.version.toString())
     versionType.set("release")
-    gameVersions.addAll(listOf("1.19", "1.19.1", "1.19.2"))
+    gameVersions.addAll(listOf("1.20.6"))
     loaders.add("fabric")
     loaders.add("quilt")
     dependencies {
@@ -104,8 +96,7 @@ curseforge {
 
         id = "632589"
         releaseType = "release"
-        addGameVersion("1.19.1")
-        addGameVersion("1.19.2")
+        addGameVersion("1.20.6")
         addGameVersion("Fabric")
         addGameVersion("Quilt")
 

@@ -3,7 +3,6 @@ package me.obsilabor.layercontrol
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import me.obsilabor.layercontrol.config.ClothConfigManager
-import me.obsilabor.layercontrol.networking.NetworkingListener
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.TitleScreen
@@ -16,7 +15,6 @@ fun init() {
             ClothConfigManager.clearConfigs()
         }
     }
-    NetworkingListener.init(false)
 }
 
 val minecraft by lazy { Minecraft.getInstance() }

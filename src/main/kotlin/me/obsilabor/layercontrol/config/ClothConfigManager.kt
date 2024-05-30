@@ -1,18 +1,14 @@
 package me.obsilabor.layercontrol.config
 
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import me.obsilabor.layercontrol.json
 import me.obsilabor.layercontrol.minecraft
-import me.obsilabor.layercontrol.networking.Packets
 import me.shedaniel.clothconfig2.api.ConfigBuilder
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.minecraft.client.gui.screens.Screen
-import net.minecraft.client.renderer.entity.ParrotRenderer
 import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.animal.Parrot
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 object ClothConfigManager {
 
@@ -25,7 +21,6 @@ object ClothConfigManager {
             .setParentScreen(minecraft.screen)
             .setTitle(Component.translatable("layercontrol.config"))
             .setSavingRunnable {
-                ClientPlayNetworking.send(Packets.I_CHANGED, PacketByteBufs.empty())
                 saveConfigToFile()
             }
         val general = builder.getOrCreateCategory(Component.translatable("layercontrol.category.general"))
@@ -38,7 +33,7 @@ object ClothConfigManager {
             }
             .setDefaultValue(LayerControlConfig.DEFAULT.renderOnOthers)
             .build())
-        general.addEntry(entryBuilder.startIntSlider(Component.translatable("layercontrol.option.parrotVariantLeft"), config?.parrotVariantLeft ?: 0, 0, ParrotRenderer.PARROT_LOCATIONS.size-1)
+        general.addEntry(entryBuilder.startIntSlider(Component.translatable("layercontrol.option.parrotVariantLeft"), config?.parrotVariantLeft ?: 0, 0, Parrot.Variant.entries.size - 1)
             .setSaveConsumer {
                 config?.parrotVariantLeft = it
             }
@@ -50,7 +45,7 @@ object ClothConfigManager {
             }
             .setDefaultValue(LayerControlConfig.DEFAULT.parrotScale ?: 0.5f)
             .build())
-        general.addEntry(entryBuilder.startIntSlider(Component.translatable("layercontrol.option.parrotVariantRight"), config?.parrotVariantRight ?: 0, 0, ParrotRenderer.PARROT_LOCATIONS.size-1)
+        general.addEntry(entryBuilder.startIntSlider(Component.translatable("layercontrol.option.parrotVariantRight"), config?.parrotVariantRight ?: 0, 0, Parrot.Variant.entries.size - 1)
             .setSaveConsumer {
                 config?.parrotVariantRight = it
             }
@@ -111,20 +106,14 @@ object ClothConfigManager {
         if (uuid == minecraft.player?.uuid) {
             return this.config ?: throw RuntimeException("Config is null")
         }
-        if (CONFIGS.filter { it.uuid == uuid }.isEmpty()) {
-            ClientPlayNetworking.send(Packets.I_WANT, PacketByteBufs.create().writeUUID(uuid))
-        }
 
         val cfg = CONFIGS.firstOrNull { it.uuid == uuid }
-        if (cfg == null) {
-            if (this.config?.renderMyConfigOnOthers == true) {
-                return this.config ?: throw RuntimeException("Config is null")
+        return cfg?.config
+            ?: if (this.config?.renderMyConfigOnOthers == true) {
+                this.config ?: throw RuntimeException("Config is null")
             } else {
-                return LayerControlConfig.DEFAULT
+                LayerControlConfig.DEFAULT
             }
-        } else {
-            return cfg.config
-        }
     }
 
     fun clearConfigs() {
